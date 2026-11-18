@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Bubble Capture</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <meta name="theme-color" content="#000000" />
+    <style>
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0; background: #000; height: 100%;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        overflow: hidden;
+      }
+      #videoWrap {
+        position: relative; width: 100vw;
+        height: 100vh; height: 100dvh;
+      }
+      video { width: 100%; height: 100%; object-fit: cover; }
+      canvas#grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+
+      #hud {
+        position: absolute; top: 10px; left: 10px; right: 10px;
+        display: flex; justify-content: space-between; align-items: center;
+        color: #ddd; font-size: 12px; letter-spacing: 0.5px;
+        background: rgba(20,20,20,0.55); backdrop-filter: blur(6px);
+        padding: 8px 12px; border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.08);
+        flex-wrap: wrap; gap: 6px;
+      }
+      #hud .val { color: #7fffd4; font-weight: 600; }
+      #xrStatus { width: 100%; font-size: 11px; color: #ffcc66; }
+
+      #controls {
+        position: absolute; bottom: 0; left: 0; right: 0;
+        display: flex; flex-direction: column; align-items: center; gap: 8px;
+        padding: 8px 10px calc(10px + env(safe-area-inset-bottom, 0px));
+        background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+      }
+      #thumbs { display: flex; gap: 5px; overflow-x: auto; max-width: 95vw; padding: 2px; }
+      #thumbs img { height: 40px; border-radius: 5px; border: 1px solid #7fffd4; flex-shrink: 0; }
+
+      #mainRow { display: flex; align-items: center; justify-content: center; gap: 16px; }
+      #shutter {
+        width: 62px; height: 62px; border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #fff, #ccc);
+        border: 4px solid rgba(255,255,255,0.4);
+        box-shadow: 0 0 16px rgba(127,255,212,0.4);
+        flex-shrink: 0;
+      }
+      #shutter:disabled { opacity: 0.4; }
+      #downloadBtnTop {
+        padding: 14px 22px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.15);
+        background: #7fffd4; color: #002; font-size: 15px; font-weight: 700;
+      }
+
+      .pillBtn {
+        padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.15);
+        background: rgba(30,30,30,0.7); backdrop-filter: blur(6px);
+        color: #eee; font-size: 12px;
+      }
+      .pillBtn.active { background: #7fffd4; color: #002; border-color: #7fffd4; }
+    </style>
+    <script type="module" crossorigin src="./assets/capture-C6MtFOJQ.js"></script>
+  </head>
+  <body>
+    <div id="videoWrap">
+      <video id="video" autoplay playsinline muted></video>
+      <canvas id="grid"></canvas>
+
+      <div id="hud">
+        <span>Pose: <span class="val" id="poseReadout">not tracking</span></span>
+        <span>Shots: <span class="val" id="shotCount">0</span></span>
+        <button id="permBtn" class="pillBtn">Enable</button>
+        <button id="clearBtn" class="pillBtn">Clear</button>
+        <div id="xrStatus"></div>
+      </div>
+
+      <div id="controls">
+        <div id="thumbs"></div>
+        <button id="shutter" disabled></button>
+        <button id="downloadBtnTop">⬇ Download ZIP</button>
+      </div>
+    </div>
+  </body>
+</html>
